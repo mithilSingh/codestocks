@@ -1,0 +1,39 @@
+{%extends "now.html"%}
+{%block content%}
+<style>
+    
+    .center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      
+
+    }
+    </style>
+    
+    <div class="text-center">
+
+
+<form  method="post"  action="#" name="cal">
+    <h3>CAlCULATOR</h3><input type="text" style="width:185px" name="expression" ><br><br>
+    
+    
+    <input type="button" value=" 1 " class="btn btn-outline-dark" onclick="cal.expression.value += '1'" >
+    <input type="button" value=" 2 " class="btn btn-outline-dark" onclick="cal.expression.value += '2'" >
+    <input type="button" value=" 3 " class="btn btn-outline-dark" onclick="cal.expression.value += '3'" >
+    <input type="button" value="+" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '+'" ><br>
+    <input type="button" value=" 4 " class="btn btn-outline-dark" onclick="cal.expression.value += '4'" >
+    <input type="button" value=" 5 " class="btn btn-outline-dark" onclick="cal.expression.value += '5'" >
+    <input type="button" value=" 6 " class="btn btn-outline-dark" onclick="cal.expression.value += '6'" >
+    <input type="button" value="-" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '-'" ><br>
+    <input type="button" value=" 7 " class="btn btn-outline-dark" onclick="cal.expression.value += '7'" >
+    <input type="button" value=" 8 " class="btn btn-outline-dark" onclick="cal.expression.value += '8'" >
+    <input type="button" value=" 9 " class="btn btn-outline-dark" onclick="cal.expression.value += '9'" >
+    <input type="button" value= "*" class="btn btn-outline-dark" style="width:35px"onclick="cal.expression.value += '*'" ><br>
+    
+    <input type="submit" value="=" style="width:139px"class="btn btn-outline-dark" >
+    <input type="button" value="/" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '/'" >
+
+</form>
+</div>
+{%endblock%}
