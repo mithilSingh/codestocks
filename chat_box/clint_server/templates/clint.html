@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+  
+  
+<html>
+<head>
+<title>Chat Room</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<style>
+
+#external_chat {
+    border: 3px #dbefff;
+    border-radius: 5px;
+    background: #464646f1;
+    max-width: 300px ;
+    min-width: 10px;
+    margin: auto;
+    margin-top: 5px;
+    word-wrap: break-word;
+ 
+  }
+  #internal_chat {
+    border: 3px #dbefff;
+    border-radius: 5px;
+    background: #eeeeeef1;
+    max-width: 300px ;
+    margin: auto;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+  #internal_chat_background {
+      margin-left: 150px;
+  }
+  #external_chat_background {
+    margin-right: 150px;
+}
+#backgroundpg{
+    border: 3px solid #c2c2c2;
+    border-radius: 5px;
+    background: #64b8fd;
+    max-width: 600px ;
+    margin: auto;
+    margin-top: 5px;
+ }
+ .centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+#mesage_back{margin-left: 0px;}
+
+</style>
+</head>
+<body style="background-color:#131313;">
+<script type="text/javascript">
+$(document).ready(function(){
+    var name =  "magnetar";
+    var socket=io.connect('http://127.0.0.1:5000');
+    var check= 0;
+    socket.on('connect',function(){
+        socket.send(name+" has connected");
+    });
+
+    socket.on('message', function(msg){
+        if(check==1){
+            check= 0;
+            
+        }else{
+  
+    
+    $("#messages").append('<div id="external_chat_background"><p style="color:white"  id="external_chat" class="text-center">'+msg+'</p></div>');
+        console.log('Received message');
+        }
+    });
+    document.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            socket.send(name+"-"+$("#msg_area").val());
+            $("#messages").append('<div id="internal_chat_background"><p id="internal_chat" class="text-center">'+$("#msg_area").val()+'</p></div>');
+            $('#msg_area').val('');
+            check= 1;          
+        }
+      });
+    $('#sendbutton').on('click',function(){
+        
+        socket.send(name+"-"+$("#msg_area").val());
+        $("#messages").append('<div id="internal_chat_background"><p id="internal_chat" class="text-center">'+$("#msg_area").val()+'</p></div>');
+        $('#msg_area').val('');
+        check= 1;
+    });
+
+})
+</script>
+<ul id="messages"></ul>
+
+<div class="text-center",id="backgroundpg">
+
+    <div class="input-group mb-3 centered">
+        <input type="text" class="form-control text-center w-25 centered" placeholder="type your message" style="max-width: 370px;" id=msg_area aria-label="Recipient's username" aria-describedby="sendbutton">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary " type="button" id="sendbutton">Send</button>
+        </div>
+      </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</div>
+</body>
+</html>
