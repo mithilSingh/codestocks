@@ -1,4 +1,4 @@
-from tkinter import*
+from tfrom tkinter import*
 from tkinter import messagebox
 from sklearn import svm
 import numpy as np 
@@ -8,7 +8,8 @@ import time as t
 root=Tk()
 root.config(bg="black")
 w=30
-k=6
+k=3
+cv=k
 l=np.zeros((w*w))
 tl=np.array([])
 ll=np.array([])
@@ -42,7 +43,7 @@ def draw(event):
     Xm=((x//k)*k)
     Ym=((y//k)*k)
     
-    c.create_rectangle(Xm,Ym,Xm+k,Ym+k,fill="black",outline="black")
+    c.create_oval(Xm,Ym,Xm+k+cv,Ym+k+cv,fill="black",outline="black")
     l[(((Ym//k))*w)+Xm//k]=rr.randint(1,3)
     print(Xm,Ym)
     
@@ -54,20 +55,23 @@ def clear():
     c.delete("all")
     l=np.zeros((w*w))
 def sel():
-    global w,c,l
+    global w,c,l,mc,tl,ll
     
     if len(tl)!=0:
         mb=messagebox.askyesno("are you sure?", "All the training data will be erassed")
     else:
         mb=True
-    print(mb)
+    print(mb)   
     if mb==True:
-        
+        mc=1
         c.delete("all")
         w=scale.get()
         c.config(height=w*k,width=w*k)
         l=np.zeros((w*w))
         root.geometry(f"{w*k}x{w*k+230}")
+        tl=np.array([])
+        ll=np.array([])
+        print(tl,ll)
      
 
 e=Entry(root)
