@@ -1,39 +1,47 @@
-{%extends "now.html"%}
-{%block content%}
-<style>
-    
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      
-
-    }
-    </style>
-    
-    <div class="text-center">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div class="text-center">
 
 <form  method="post"  action="#" name="cal">
-    <h3>CAlCULATOR</h3><input type="text" style="width:185px" name="expression" ><br><br>
+    {%if a=="" %}
+        <h3>CAlCULATOR</h3><input type="text" value=""  name="expression" style="width:34.8%" dir="rtl"><br><br>
+    {%elif a!=""%}
+        <h3>CAlCULATOR</h3><input type="text" value= '{{a}}'  name="expression" style="width:34.8%" ><br><br>
+    {%endif%}
+    <input type="button" value=" C " class="btn btn-outline-dark" onclick="cal.expression.value = ''" style="width:34.8%" ><br>
+    <input type="button" value=" 1 " class="btn btn-outline-dark" onclick="cal.expression.value += '1'" style="width:8.6%">
+    <input type="button" value=" 2 " class="btn btn-outline-dark" onclick="cal.expression.value += '2'"  style="width:8.6%">
+    <input type="button" value=" 3 " class="btn btn-outline-dark" onclick="cal.expression.value += '3'"  style="width:8.6%">
+    <input type="button" value="+" class="btn btn-outline-dark" style="width:7%" onclick="cal.expression.value += '+'" ><br>
+    <input type="button" value=" 4 " class="btn btn-outline-dark" onclick="cal.expression.value += '4'" style="width:8.6%" >
+    <input type="button" value=" 5 " class="btn btn-outline-dark" onclick="cal.expression.value += '5'" style="width:8.6%">
+    <input type="button" value=" 6 " class="btn btn-outline-dark" onclick="cal.expression.value += '6'" style="width:8.6%">
+    <input type="button" value="-" class="btn btn-outline-dark" style="width:7%" onclick="cal.expression.value += '-'" ><br>
+    <input type="button" value=" 7 " class="btn btn-outline-dark" onclick="cal.expression.value += '7'"style="width:8.6%">
+    <input type="button" value=" 8 " class="btn btn-outline-dark" onclick="cal.expression.value += '8'" style="width:8.6%">
+    <input type="button" value=" 9 " class="btn btn-outline-dark" onclick="cal.expression.value += '9'" style="width:8.6%">
+    <input type="button" value= "*" class="btn btn-outline-dark" style="width:7%"onclick="cal.expression.value += '*'" ><br>
     
-    
-    <input type="button" value=" 1 " class="btn btn-outline-dark" onclick="cal.expression.value += '1'" >
-    <input type="button" value=" 2 " class="btn btn-outline-dark" onclick="cal.expression.value += '2'" >
-    <input type="button" value=" 3 " class="btn btn-outline-dark" onclick="cal.expression.value += '3'" >
-    <input type="button" value="+" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '+'" ><br>
-    <input type="button" value=" 4 " class="btn btn-outline-dark" onclick="cal.expression.value += '4'" >
-    <input type="button" value=" 5 " class="btn btn-outline-dark" onclick="cal.expression.value += '5'" >
-    <input type="button" value=" 6 " class="btn btn-outline-dark" onclick="cal.expression.value += '6'" >
-    <input type="button" value="-" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '-'" ><br>
-    <input type="button" value=" 7 " class="btn btn-outline-dark" onclick="cal.expression.value += '7'" >
-    <input type="button" value=" 8 " class="btn btn-outline-dark" onclick="cal.expression.value += '8'" >
-    <input type="button" value=" 9 " class="btn btn-outline-dark" onclick="cal.expression.value += '9'" >
-    <input type="button" value= "*" class="btn btn-outline-dark" style="width:35px"onclick="cal.expression.value += '*'" ><br>
-    
-    <input type="submit" value="=" style="width:139px"class="btn btn-outline-dark" >
-    <input type="button" value="/" class="btn btn-outline-dark" style="width:35px" onclick="cal.expression.value += '/'" >
 
+    <input type="button" value=" 0 " class="btn btn-outline-dark" onclick="cal.expression.value += '0'" style="width:17.8%">
+    <input type="button" value=" . " class="btn btn-outline-dark" onclick="cal.expression.value += '.'" style="width:8.6%">
+    <input type="button" value="/" class="btn btn-outline-dark" style="width:7%" onclick="cal.expression.value += '/'" >
+    <br>
+    <input type="submit" value="=" style="width:34.8%"class="btn btn-outline-dark" >
 </form>
 </div>
-{%endblock%}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>
