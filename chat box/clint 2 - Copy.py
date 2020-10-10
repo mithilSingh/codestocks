@@ -38,10 +38,7 @@ while True:
                 ml.yview_moveto('1.0')
         except:
             print("disconnected from the server")
-    def nw():
-        rt=Tk()
-        b3=Button(rt,text="change name")
-        rt.mainloop()
+
     def sendt():
         eg=e.get()
         cs.send(bytes(eg,"utf-8"))
@@ -63,8 +60,6 @@ while True:
 
         b=Button(root,text="send",command=sendt,bd=0,bg="grey10",fg="grey80")
         b.pack(side="bottom")
-        #b=Button(root,text="...",command=nw,bd=0,bg="grey10",fg="grey80")
-        #b.pack(side="bottom")
         e=Entry(root,bg="grey15",bd=0,fg="grey80",width=30,justify="center",insertbackground="grey80")
         e.pack(side="bottom")
         t=Thread(target=rec)

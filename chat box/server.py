@@ -4,7 +4,7 @@ from threading import*
 s=socket.socket()
 s.bind(("192.168.0.105",5555))
 s.listen(2)
-print("waiting for connections")
+print("waiting for connections....")
 #r=Tk()
 l=[]
 def send_it(li,c,msg,name):
