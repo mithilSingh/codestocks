@@ -1,0 +1,33 @@
+afrom  PIL import*
+from  PIL import Image,ImageTk
+import numpy as np
+from numpy import asarray
+from tkinter import *
+amo=25
+def open():
+	ph=Image.open2(e.get())
+	photo=ImageTk.PhotoImage(ph)
+	Label(root,image=photo).pack(anchor=NW)
+	root.update()
+def brightness(file_location,brightness_value):
+	img=Image.open(file_location)
+	data=np.array(asarray(img))
+	for i1 in range(data.shape[0]):
+		for i2 in range(data.shape[1]):
+			for i3 in range(data.shape[2]):
+				if data[i1][i2][i3]+brightness_value<0:
+					data[i1][i2][i3]=0
+				elif data[i1][i2][i3]+brightness_value>=255:
+					data[i1][i2][i3]=255
+				elif data[i1][i2][i3]+brightness_value<255 :
+					data[i1][i2][i3]+=brightness_value
+			
+	data=np.array(data,dtype=np.uint8)
+	p=Image.fromarray(data,mode='RGB')
+	return p
+root=Tk()
+e=Entry(root)
+e.pack(anchor=S)
+b=Button(root,text='open',command=open)
+b.pack(anchor=S)
+root.mainloop()
