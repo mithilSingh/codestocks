@@ -3,7 +3,7 @@ from threading import Thread
 from tkinter import *
 end=True
 c=socket()
-c.connect(("localhost",55557))
+c.connect(("192.168.1.12",55557))
 luck=int(c.recv(1024).decode())
 root2=Tk()
 root=Frame(root2)
@@ -39,11 +39,13 @@ def check(x,li):
     for i in cl:
         if li[i[0]]["text"]==x and li[i[1]]["text"]==x and li[i[2]]["text"]==x:
             return True
+    if b1["text"]!="" and b2["text"]!="" and b3["text"]!="" and b4["text"]!="" and b5["text"]!="" and b6["text"]!="" and b7["text"]!="" and b8["text"]!="" and b9["text"]!="" :
+        return "draw"
                 
 def req():
     c.send(bytes('''>>>>>>>>>>>>>>
                         REPLAY      
-                    <<<<<<<<<<<<<<'''))
+                    <<<<<<<<<<<<<<''',"utf-8"))
 def con(w):
     f=Frame(root,height=320,width=320)
     f.place(x=0,y=0)  
@@ -56,17 +58,18 @@ def mainsend(w):
     mg[w-1].config(text=cns)
     mg[w-1].config(image=cnsi)
     print(mg[0])
-    
-    if check(sn,mg):
+    if check("jj",mg)=="draw":
+        con("draw")
+    elif check(sn,mg):
         
         con("lost")
-    if check(cns,mg):
+    elif check(cns,mg):
         con("won")
     root.update()
     for i in mg:
         i.config(state=DISABLED)
 def REPLAY():
-    pass
+    print("replay")
 def listen():
     global end
     while end:
@@ -86,10 +89,13 @@ def listen():
                     
                     i.config(state=NORMAL)
             
-            if check(sn,mg):
-                con("lost")
-            if check(cns,mg):
-                con("won")
+    if check("ppppp",mg)=="draw":
+        con("draw")
+    elif check(sn,mg):
+        
+        con("lost")
+    elif check(cns,mg):
+        con("won")
            
 
 t=Thread(target=listen)
