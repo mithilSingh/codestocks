@@ -1,4 +1,5 @@
   
+  
 from tkinter.constants import S
 import pygame as pg
 from math import tan,radians,atan,degrees,cos,sin,sqrt, trunc
@@ -97,6 +98,7 @@ while run:
     print(xpos,ypos,x_p,y_p)
     if ko:
         
-        pg.draw.circle(dis,(255,255,255),(x_p,y_p),3)
+        pg.draw.line(dis,(0,0,255),(x_p-2,y_p),(x_p+2,y_p),1)
+        pg.draw.line(dis,(0,0,255),(x_p,y_p-2),(x_p,y_p+2),1)
         #print("yo")
 pg.quit()
