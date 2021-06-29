@@ -3,7 +3,7 @@ from math import sin ,cos,sqrt,radians
 pg.init()
 dis=pg.display.set_mode((700,500))
 run=True
-a=10
+a=100
 st_len=150
 st_pos=(350,250)
 x,y=0,0

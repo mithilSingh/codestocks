@@ -3,7 +3,7 @@ from math import acos ,sin ,cos,sqrt,radians,degrees
 
 pg.init()
 dis =pg.display.set_mode((1000,700))
-acc=0.25
+acc=0.4
 
 class bob :
     def __init__(self,x_pos,y_pos,org,str_len):
@@ -31,7 +31,7 @@ class bob :
         
         
         '''
-        pg.draw.line(dis,(50,50,50),(x_,y_),(self.x_,self.y_),)
+        pg.draw.line(dis,(250,250,250),(x_,y_),(self.x_,self.y_),)
         pg.draw.circle(dis,(255,255,255),(self.x_,self.y_),10,)
         ny=cos(radians(ang))*F*400
         nx=sqrt((F*400)**2-ny**2)
@@ -69,7 +69,7 @@ while run:
 
                 ang2=0
                 vel2=0
-        if pg.mouse.get_pressed()[0]==True:
+        if pg.mouse.get_pressed()[0]:
             mouse_key_not_pressed=False
             x_p=pg.mouse.get_pos()[0]
             y_p=pg.mouse.get_pos()[1]
