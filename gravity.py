@@ -8,16 +8,16 @@ from threading import Thread
 
 clk = pg.time.Clock()
 
-fps = 40
+fps = 400
 w, h = 1000, 700
 dis = pg.display.set_mode((w, h))
 
 run = True
 
-G = 0.00001
+G = 0.001
 continue_ = 0
 lines = 1
-
+trac_cou=1
 
 class Mass:
     def __init__(self, mass, color, coordinates, v, radius=3):
@@ -27,9 +27,12 @@ class Mass:
         self.x_component, self.y_component = 0, 0
         self.x_vel, self.y_vel = v
         self.radius = (self.mass) ** (1 / radius)
-
+        self.track=[]
+        self.previous=()
     def update(self):
+
         if continue_ % 2 == 0:
+            self.previous=[self.x,self.y]
             self.x_acc = self.x_component
             self.y_acc = self.y_component
             self.y_vel += self.y_acc
@@ -38,6 +41,18 @@ class Mass:
             self.y += self.y_vel
 
         pg.draw.circle(dis, self.color, (self.x, self.y), (self.radius))
+
+        if trac_cou%2==0:
+            try:
+                self.track.append(self.previous)
+                pg.draw.lines(dis,(255,255,255),False,self.track)
+
+            except:
+                pass
+        else:
+            self.track=[]
+
+
 
     def forces(self):
         try:
@@ -67,8 +82,10 @@ class Mass:
 
 
 def specifications():
-    global e1, e2, e3, continue_, e4,l,root,k,t2
-
+    global e1, e2, e3, continue_, e4,l,root,k,t2,trac_cou
+    def tracker():
+        global  trac_cou
+        trac_cou+=1
     def add_():
         global continue_, lines
         continue_ += 1
@@ -109,6 +126,7 @@ def specifications():
     state_frame.pack()
     Checkbutton(state_frame, text="pause", command=add_).grid(column=0,row=0)
     Checkbutton(state_frame, text="lines", command=line).grid(column=1,row=0)
+    Checkbutton(state_frame, text="tracker", command=tracker).grid(column=2, row=0)
     Button(root,text="clear enviourment",command=clear,padx=30).pack()
     t2=Thread(target=kill_it)
     t2.start()
@@ -162,4 +180,5 @@ while run:
 
 pg.quit()
 k=False
+
 
