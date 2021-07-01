@@ -20,9 +20,9 @@ lines = 1
 trac_cou=1
 
 class Mass:
-    def __init__(self, mass, color, coordinates, v, radius=3):
+    def __init__(self, mass, coordinates, v , radius=3):
         self.mass = mass
-        self.color = color
+        self.color=(randint(0,255),randint(0,255),randint(0,255))
         self.x, self.y = coordinates
         self.x_component, self.y_component = 0, 0
         self.x_vel, self.y_vel = v
@@ -40,17 +40,20 @@ class Mass:
             self.x += self.x_vel
             self.y += self.y_vel
 
+
         pg.draw.circle(dis, self.color, (self.x, self.y), (self.radius))
 
         if trac_cou%2==0:
             try:
                 self.track.append(self.previous)
-                pg.draw.lines(dis,(255,255,255),False,self.track)
+                pg.draw.lines(dis,self.color,False,self.track)
 
             except:
                 pass
         else:
             self.track=[]
+        if len(self.track)>1000:
+            self.track.pop(0)
 
 
 
@@ -166,7 +169,7 @@ while run:
                 yvel= -int(e3.get())
             except:
                 yvel=0
-            l.append(Mass(m, (255, 255, 255), pg.mouse.get_pos(), (xvel,yvel) ,rm))
+            l.append(Mass(m,  pg.mouse.get_pos(), (xvel,yvel) ,radius=rm))
 
 
             # l.append(Mass(30, (255, 255, 255), pg.mouse.get_pos(), (0,0)))
@@ -180,5 +183,4 @@ while run:
 
 pg.quit()
 k=False
-
 
