@@ -89,11 +89,10 @@ def finish():
     global track 
     log(str("---->")+str(track))  
     seter=dist[counter[1]][counter[0]]                      
-    while 1:
-        if seter.parent ==None:
-            break
-        setColor(seter.x,15-seter.y,"g")
-        seter=seter.parent 
+    for i in track:
+        setColor(i[0],15-i[1],"y")
+        # setColor(seter.x,15-seter.y,"g")
+        # seter=seter.parent 
         
     #write a function add two numbers
     
@@ -122,7 +121,7 @@ def main():
             orientation=orientation%360
         elif orientation<0:
             orientation+=360
-        log (str(track))
+        # log (str(track))
         track.append([counter[0],counter[1]])
         for i in range(16):
             for j in range(16):
@@ -190,143 +189,157 @@ def main():
             # log("-----------------------------------")
             if orientation==0 and  dist[counter[1]-1][counter[0]].score<=cvalue: 
                 # log("11")
-                
+                dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                 counter[1]-=1
-                # dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
                 moveForward()
                  
                 continue
             elif orientation==90 and dist[counter[1]][counter[0]+1].score<=cvalue:
                 # log("22")
-                
+                dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+
                 counter[0]+=1
-                # dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
                 moveForward()
                  
                 continue
             elif orientation==180 and dist[counter[1]+1][counter[0]].score<=cvalue:
+                dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                 counter[1]+=1
                 moveForward()
-                # dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
                 # log("33")
                 continue
             elif orientation==270 and dist[counter[1]][counter[0]-1].score<=cvalue:
-            
+                dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
                 counter[0]-=1
                 moveForward()
-                # dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
                 # log("44")
                 continue
             
         if not wallLeft():
             if orientation==90: 
                 if dist[counter[1]-1][counter[0]].score<=cvalue:
+                    dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                     counter[1]-=1
                     turnLeft()
                     moveForward()
                     orientation-=90
-                    # dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
                      
                     continue
             elif orientation==180:
                 if dist[counter[1]][counter[0]+1].score<=cvalue:
+                    dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+
                     counter[0]+=1
                     turnLeft()
                     moveForward()
                     orientation-=90
-                    # dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
                      
                     continue
             elif orientation==270:
                 if dist[counter[1]+1][counter[0]].score<=cvalue:
+                    dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                     counter[1]+=1
                     turnLeft()
                     moveForward()
                     orientation-=90
-                    # dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
                     continue
             elif orientation==0:
                 if dist[counter[1]][counter[0]-1].score<=cvalue:
+                    dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
                     counter[0]-=1
                     turnLeft()
                     moveForward()
                     orientation-=90
-                    # dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
                     continue
             
         if not wallRight():
             
             if orientation==270: 
                 if dist[counter[1]-1][counter[0]].score<=cvalue:
+                    dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                     counter[1]-=1
                     turnRight()
                     moveForward()
                     orientation+=90
-                    # dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
                     continue
             elif orientation==0:
 
                 if dist[counter[1]][counter[0]+1].score<=cvalue:
+
+                    dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
                     counter[0]+=1
                     turnRight()
                     moveForward()
                     orientation+=90
-                    # dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+                    
                     continue
             elif orientation==90:
                 if dist[counter[1]+1][counter[0]].score<=cvalue:
+                    dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
                     counter[1]+=1
                     turnRight()
                     moveForward()
                     orientation+=90
-                    # dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+                    
                     continue
             elif orientation==180:
                 if dist[counter[1]][counter[0]-1].score<=cvalue:
+                    dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
                     counter[0]-=1
                     turnRight()
                     moveForward()
                     orientation+=90
-                    # dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
                      
                     continue
         if not wallBack():
             if orientation==270: 
                 if dist[counter[1]][counter[0]+1].score<=cvalue:
+                    dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+
                     counter[0]+=1
                     turnRight()
                     turnRight()
                     moveForward()
                     orientation=90
-                    # dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
                     continue
             elif orientation==0:
 
                 if dist[counter[1]+1][counter[0]].score<=cvalue:
+                    dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                     counter[1]+=1
                     turnRight()
                     turnRight()
                     moveForward()
                     orientation=180
-                    # dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
                     continue
             elif orientation==90:
                 if dist[counter[1]][counter[0]-1].score<=cvalue:
+                    dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
                     counter[0]-=1
                     turnRight()
                     turnRight()
                     moveForward()
                     orientation=270
-                    # dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
                     continue
             elif orientation==180:
                 if dist[counter[1]-1][counter[0]].score<=cvalue:
+                    dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
                     counter[1]-=1
                     turnRight()
                     turnRight()
                     moveForward()
                     orientation=0
-                    # dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
                     continue
         
         updatedist()
