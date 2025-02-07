@@ -17,17 +17,29 @@ class cell:
 
 dist=[]
 track=[]
-
-
+alltracks=[]
+back=False
+turn=0
+turns=0
+leg=10000
+quit=False
 def updatedist():
-    global dist
+    global dist,back,turns
     # log("yo")
-    tobechecked=[dist[7][7],dist[8][7],dist[7][8],dist[8][8]]
+    if back:
+        dist[15][0].score=0
+
+        tobechecked=[dist[15][0]]
+        dist[15][0].hit=True
+    else:
+        tobechecked=[dist[7][7],dist[8][7],dist[7][8],dist[8][8]]
+        for k in [dist[7][7],dist[8][7],dist[7][8],dist[8][8]]:
+            k.hit=True
+            k.score=0
     # for i in dist :
     #     for j in i:
     #         j.score=0
-    for k in [dist[7][7],dist[8][7],dist[7][8],dist[8][8]]:
-        k.hit=True
+    
     while len(tobechecked)!=0:
         pointer=tobechecked.pop()
         
@@ -86,11 +98,43 @@ def updatedist():
     # log(str(o))        
 
 def finish():  
-    global track 
-    log(str("---->")+str(track))  
-    seter=dist[counter[1]][counter[0]]                      
-    for i in track:
-        setColor(i[0],15-i[1],"y")
+    global track ,back,turns,leg,quit,alltracks
+    
+    clen=len(track)
+    if clen<leg:
+        leg=clen
+    elif leg==clen:
+        quit=True
+        log (alltracks)
+        kot=10000
+        btrack=0
+        t=0
+        # for i in alltracks:
+            
+        #     if i[1]<kot:
+        #         kot=i[1] 
+        #         btrack=t
+        #     t+=1
+        # log("--"+str(btrack)+"//"+str(len(alltracks)))
+        # track=alltracks[btrack][0]
+                
+        for i in track:
+                setColor(i[0],15-i[1],"y")
+    
+    
+    alltracks.append([track,turns])
+    turns=0
+    track=[]
+    log(leg) 
+    if back:
+        back=False
+    else :
+        back=True
+    updatedist()
+    
+    # seter=dist[counter[1]][counter[0]]                      
+    # for i in track:
+    #     setColor(i[0],15-i[1],"y")
         # setColor(seter.x,15-seter.y,"g")
         # seter=seter.parent 
         
@@ -99,7 +143,7 @@ def finish():
 
 
 def main():
-    global dist,track,counter
+    global dist,track,counter,turns
     
     for i in range(16):
         dist.append([])
@@ -117,6 +161,9 @@ def main():
             setText(i,j,str(dist[i][j].score))
     setColor(0, 0, "b") 
     while True:
+        if quit:
+            
+            break
         if orientation>270:
             orientation=orientation%360
         elif orientation<0:
@@ -135,7 +182,7 @@ def main():
         if cvalue==0:
             
             finish()
-            break
+            
 
         # if wallFront():
         #     dist[counter[1]][counter[0]].wall=bytes(2**(orientation/90))
@@ -214,7 +261,7 @@ def main():
                 dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
 
                 counter[0]-=1
-                moveForward()
+                moveForward()                                                                                        
                 # log("44")
                 continue
             
@@ -226,6 +273,7 @@ def main():
                     counter[1]-=1
                     turnLeft()
                     moveForward()
+                    turns+=1
                     orientation-=90
                      
                     continue
@@ -236,6 +284,7 @@ def main():
                     counter[0]+=1
                     turnLeft()
                     moveForward()
+                    turns+=1
                     orientation-=90
                      
                     continue
@@ -246,6 +295,7 @@ def main():
                     counter[1]+=1
                     turnLeft()
                     moveForward()
+                    turns+=1
                     orientation-=90
                     continue
             elif orientation==0:
@@ -254,7 +304,9 @@ def main():
 
                     counter[0]-=1
                     turnLeft()
+                    
                     moveForward()
+                    turns+=1
                     orientation-=90
                     continue
             
@@ -267,6 +319,7 @@ def main():
                     counter[1]-=1
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation+=90
                     continue
             elif orientation==0:
@@ -277,6 +330,7 @@ def main():
                     counter[0]+=1
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation+=90
                     
                     continue
@@ -286,6 +340,7 @@ def main():
                     counter[1]+=1
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation+=90
                     
                     continue
@@ -296,6 +351,7 @@ def main():
                     counter[0]-=1
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation+=90
                      
                     continue
@@ -308,6 +364,7 @@ def main():
                     turnRight()
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation=90
                     continue
             elif orientation==0:
@@ -319,6 +376,7 @@ def main():
                     turnRight()
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation=180
                     continue
             elif orientation==90:
@@ -329,6 +387,7 @@ def main():
                     turnRight()
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation=270
                     continue
             elif orientation==180:
@@ -339,6 +398,7 @@ def main():
                     turnRight()
                     turnRight()
                     moveForward()
+                    turns+=1
                     orientation=0
                     continue
         
@@ -352,3 +412,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
