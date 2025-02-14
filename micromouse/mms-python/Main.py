@@ -1,3 +1,4 @@
+
 from API import * 
 import sys
 from time import sleep
@@ -98,39 +99,89 @@ def updatedist():
     # log(str(o))        
 
 def finish():  
-    global track ,back,turns,leg,quit,alltracks
+     
+    global track, back, turns, leg, quit, alltracks
     
-    clen=len(track)
-    if clen<leg:
-        leg=clen
-    elif leg==clen:
-        quit=True
-        log (alltracks)
-        kot=10000
-        btrack=0
-        t=0
-        # for i in alltracks:
-            
-        #     if i[1]<kot:
-        #         kot=i[1] 
-        #         btrack=t
-        #     t+=1
-        # log("--"+str(btrack)+"//"+str(len(alltracks)))
-        # track=alltracks[btrack][0]
+    clen = len(track)
+    if clen < leg:
+        leg = clen
+    elif leg == clen:
+        quit = True
+        log(track)
+        kot = 10000
+        btrack = 0
+        t = 0 
+        track.reverse()
+        turnRight() 
+        turnRight()      
+        moveForwardHalf()
+        
+        for i in range(len(track) ):  # Avoid index out of range error
+            log("-->"+str(track[i]))
+            if (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                track[i][0] < track[i+1][0] and track[i+1][1] > track[i+2][1]):
                 
-        for i in track:
-                setColor(i[0],15-i[1],"y")
+                log("1")
+                turnLeft45()
+                moveForwardHalf()
+                turnLeft45()
+                
+            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                  track[i][0] > track[i+1][0] and track[i+1][1] < track[i+2][1]):
+                log("2")
+                turnLeft45()
+                moveForwardHalf()
+                turnLeft45()
+            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                  track[i+1][0] < track[i+2][0] and track[i][1] < track[i+1][1]):
+                log("3")
+                turnLeft45()
+                moveForwardHalf()
+                turnLeft45()
+            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                  track[i+1][0] > track[i+2][0] and track[i][1] > track[i+1][1]):
+                log("4")
+                turnLeft45()
+                moveForwardHalf()
+                turnLeft45()
+            
+            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                track[i][0] < track[i+1][0] and track[i+1][1] < track[i+2][1]):
+                log("5")
+                turnRight45()
+                moveForwardHalf()
+                turnRight45()
+            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                  track[i][0] > track[i+1][0] and track[i+1][1] > track[i+2][1]):
+                log("6")
+                turnRight45()
+                moveForwardHalf()
+                turnRight45()
+            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                  track[i+1][0] < track[i+2][0] and track[i][1] > track[i+1][1]):
+                log("7")
+                turnRight45()
+                moveForwardHalf()
+                turnRight45()
+            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                  track[i+1][0] > track[i+2][0] and track[i][1] < track[i+1][1]):
+                log("8")
+                turnRight45()
+                moveForwardHalf()
+                turnRight45()
+            else:
+                log("else")
+                moveForward()
+                log("else-done")
     
-    
-    alltracks.append([track,turns])
-    turns=0
-    track=[]
+    alltracks.append([track, turns])
+    turns = 0
+    track = []
     log(leg) 
-    if back:
-        back=False
-    else :
-        back=True
+    
+    back = not back
     updatedist()
+
     
     # seter=dist[counter[1]][counter[0]]                      
     # for i in track:
