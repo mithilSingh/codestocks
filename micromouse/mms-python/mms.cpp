@@ -1,4 +1,5 @@
 
+
 #include <Wire.h>
 #include <MPU6050.h>
 
@@ -84,7 +85,7 @@ void fwd() {
         x++;
         if(x % 20 == 0){
           wallStatus(wl, wr, wf);
-          if(wr>200 && wl>1000){
+          if(wr>400 && wl>1000){
           yaw+=(wl-wr)/1000*1.5;
           orientation = alpha * yaw + (1 - alpha) * accelRoll;
 
@@ -321,7 +322,7 @@ void loop() {
             //    stopMotors() ;
             // }
             orientation = alpha * yaw + (1 - alpha) * accelRoll;
-            if (wl > 1600 && wr > 1300 && wf > 2000) {
+            if (wl > 1800 && wr > 1600 && wf > 1200) {
                 turn180();
                 orientation = alpha * yaw + (1 - alpha) * accelRoll;       
             } 
@@ -329,10 +330,10 @@ void loop() {
                 stopMotors();
             } 
           
-            else if (wl > 400 && wr < 780 && wf >2000) {
+            else if (wl > 400 && wr < 780 && wf >1200) {
                 turnRight();
                 orientation = alpha * yaw + (1 - alpha) * accelRoll;
-            } else if (wr > 700 && wl < 1400 && wf>2000 ) {
+            } else if (wr > 700 && wl < 1800 && wf>1200 ) {
                 turnLeft();
                 orientation = alpha * yaw + (1 - alpha) * accelRoll;
             } else {
