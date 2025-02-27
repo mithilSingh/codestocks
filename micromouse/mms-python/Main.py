@@ -103,84 +103,25 @@ def finish():
     global track, back, turns, leg, quit, alltracks
     
     clen = len(track)
-    if clen < leg:
+    log(str(clen<leg))
+    if clen < leg or clen > leg :
         leg = clen
+        alltracks.append([track, turns])
+        turns = 0
+        track = []
+        log(leg) 
+    
+        back = not back
+        updatedist()
     elif leg == clen:
         quit = True
         log(track)
         kot = 10000
         btrack = 0
         t = 0 
-        track.reverse()
-        turnRight() 
-        turnRight()      
-        moveForwardHalf()
         
-        for i in range(len(track) ):  # Avoid index out of range error
-            log("-->"+str(track[i]))
-            if (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
-                track[i][0] < track[i+1][0] and track[i+1][1] > track[i+2][1]):
-                
-                log("1")
-                turnLeft45()
-                moveForwardHalf()
-                turnLeft45()
-                
-            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
-                  track[i][0] > track[i+1][0] and track[i+1][1] < track[i+2][1]):
-                log("2")
-                turnLeft45()
-                moveForwardHalf()
-                turnLeft45()
-            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
-                  track[i+1][0] < track[i+2][0] and track[i][1] < track[i+1][1]):
-                log("3")
-                turnLeft45()
-                moveForwardHalf()
-                turnLeft45()
-            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
-                  track[i+1][0] > track[i+2][0] and track[i][1] > track[i+1][1]):
-                log("4")
-                turnLeft45()
-                moveForwardHalf()
-                turnLeft45()
-            
-            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
-                track[i][0] < track[i+1][0] and track[i+1][1] < track[i+2][1]):
-                log("5")
-                turnRight45()
-                moveForwardHalf()
-                turnRight45()
-            elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
-                  track[i][0] > track[i+1][0] and track[i+1][1] > track[i+2][1]):
-                log("6")
-                turnRight45()
-                moveForwardHalf()
-                turnRight45()
-            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
-                  track[i+1][0] < track[i+2][0] and track[i][1] > track[i+1][1]):
-                log("7")
-                turnRight45()
-                moveForwardHalf()
-                turnRight45()
-            elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
-                  track[i+1][0] > track[i+2][0] and track[i][1] < track[i+1][1]):
-                log("8")
-                turnRight45()
-                moveForwardHalf()
-                turnRight45()
-            else:
-                log("else")
-                moveForward()
-                log("else-done")
     
-    alltracks.append([track, turns])
-    turns = 0
-    track = []
-    log(leg) 
     
-    back = not back
-    updatedist()
 
     
     # seter=dist[counter[1]][counter[0]]                      
@@ -210,250 +151,323 @@ def main():
     for i in range(16):
         for j in range(16):
             setText(i,j,str(dist[i][j].score))
-    setColor(0, 0, "b") 
+    setColor(0, 0, "g") 
     while True:
         if quit:
             
-            break
-        if orientation>270:
-            orientation=orientation%360
-        elif orientation<0:
-            orientation+=360
-        # log (str(track))
-        track.append([counter[0],counter[1]])
-        for i in range(16):
-            for j in range(16):
-                setText(j,15-i,str(dist[i][j].score))
-                p=0
-                for k in list("nesw"):
-                    if dist[i][j].wall[p]  :
-                        setWall(j,15-i,k)  
-                    p+=1    
-        cvalue=dist[counter[1]][counter[0]].score
-        if cvalue==0:
-            
-            finish()
-            
+            if wasReset():
 
-        # if wallFront():
-        #     dist[counter[1]][counter[0]].wall=bytes(2**(orientation/90))
-            
-        # if wallRight():
-        #     if orientation==270:
-        #         dist[counter[1]][counter[0]].wall=0b0001
+                ackReset()
+                if (track[0]==[7,7] or track[0]==[8,7] or track[0]==[7,8] or track[0]==[8,8]): 
+                    track.reverse()
+
+                    # turnRight() 
+                if  wallFront():
+                    turnRight()
+
+                moveForwardHalf()
                 
-        #     else:
-        #         dist[counter[1]][counter[0]].wall=bytes(2**((orientation+90)/90))
-        # if wallLeft():
-        #     if orientation==0:
-        #         dist[counter[1]][counter[0]].wall=0b1000
-        #     else:
-        #         dist[counter[1]][counter[0]].wall=bytes(2**((orientation-90)/90))
-        # log(str (orientation))
-        if (orientation == 90 and wallLeft()) or (orientation == 270 and wallRight()) or (wallFront() and orientation == 0) or (orientation==180 and wallBack()):
-            dist[counter[1]][counter[0]].wall[0] = 1
-            updatedist()
-            # Mark the north wall of the current cell
-            try :
-                dist[counter[1] - 1][counter[0]].wall[2] = 1  # Mark the south wall of the cell above
-            except:
-                pass
-        if (orientation == 180 and wallLeft()) or (orientation == 0 and wallRight()) or (wallFront() and orientation == 90)or (orientation==270 and wallBack()):
-            dist[counter[1]][counter[0]].wall[1] = 1
-            updatedist()
-                # Mark the east wall of the current cell
-            try:
-                dist[counter[1]][counter[0] + 1].wall[3] = 1  # Mark the west wall of the cell to the right
-            except:
-                pass
-        if (orientation == 270 and wallLeft()) or (orientation == 90 and wallRight()) or (wallFront() and orientation == 180)or (orientation==0 and wallBack()):
-            dist[counter[1]][counter[0]].wall[2] = 1
-                # Mark the south wall of the current cell
-            updatedist()
-            try:
-                dist[counter[1] + 1][counter[0]].wall[0] = 1  # Mark the north wall of the cell below
-            except:
-                pass
+                log(str(track))
+                for i in range(len(track)-2 ):  # Avoid index out of range error
+
+                    log("-->"+str(track[i]))
+                    if (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                        track[i][0] < track[i+1][0] and track[i+1][1] > track[i+2][1]):
+                        
+                        log("1")
+                        turnLeft45()
+                        moveForwardHalf()
+                        turnLeft45()
+                        
+                    elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                        track[i][0] > track[i+1][0] and track[i+1][1] < track[i+2][1]):
+                        log("2")
+                        turnLeft45()
+                        moveForwardHalf()
+                        turnLeft45()
+                    elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                        track[i+1][0] < track[i+2][0] and track[i][1] < track[i+1][1]):
+                        log("3")
+                        turnLeft45()
+                        moveForwardHalf()
+                        turnLeft45()
+                    elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                        track[i+1][0] > track[i+2][0] and track[i][1] > track[i+1][1]):
+                        log("4")
+                        turnLeft45()
+                        moveForwardHalf()
+                        turnLeft45()
+                    
+                    elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                        track[i][0] < track[i+1][0] and track[i+1][1] < track[i+2][1]):
+                        log("5")
+                        turnRight45()
+                        moveForwardHalf()
+                        turnRight45()
+                    elif (track[i][1] == track[i+1][1] and track[i+1][0] == track[i+2][0] and 
+                        track[i][0] > track[i+1][0] and track[i+1][1] > track[i+2][1]):
+                        log("6")
+                        turnRight45()
+                        moveForwardHalf()
+                        turnRight45()
+                    elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                        track[i+1][0] < track[i+2][0] and track[i][1] > track[i+1][1]):
+                        log("7")
+                        turnRight45()
+                        moveForwardHalf()
+                        turnRight45()
+                    elif (track[i][0] == track[i+1][0] and track[i+1][1] == track[i+2][1] and 
+                        track[i+1][0] > track[i+2][0] and track[i][1] < track[i+1][1]):
+                        log("8")
+                        turnRight45()
+                        moveForwardHalf()
+                        turnRight45()
+                    else:
+                        log("else")
+                        moveForward()
+                        log("else-done")
+                moveForwardHalf()
+                
+        else:
+            if orientation>270:
+                orientation=orientation%360
+            elif orientation<0:
+                orientation+=360
+            # log (str(track))
+            track.append([counter[0],counter[1]])
+            for i in range(16):
+                for j in range(16):
+                    setText(j,15-i,str(dist[i][j].score))
+                    p=0
+                    for k in list("nesw"):
+                        if dist[i][j].wall[p]  :
+                            setWall(j,15-i,k)  
+                        p+=1    
+            cvalue=dist[counter[1]][counter[0]].score
+            if cvalue==0:
+                
+                finish()
+                
+
+            # if wallFront():
+            #     dist[counter[1]][counter[0]].wall=bytes(2**(orientation/90))
+                
+            # if wallRight():
+            #     if orientation==270:
+            #         dist[counter[1]][counter[0]].wall=0b0001
+                    
+            #     else:
+            #         dist[counter[1]][counter[0]].wall=bytes(2**((orientation+90)/90))
+            # if wallLeft():
+            #     if orientation==0:
+            #         dist[counter[1]][counter[0]].wall=0b1000
+            #     else:
+            #         dist[counter[1]][counter[0]].wall=bytes(2**((orientation-90)/90))
+            # log(str (orientation))
+            if (orientation == 90 and wallLeft()) or (orientation == 270 and wallRight()) or (wallFront() and orientation == 0) or (orientation==180 and wallBack()):
+                dist[counter[1]][counter[0]].wall[0] = 1
+                updatedist()
+                # Mark the north wall of the current cell
+                try :
+                    dist[counter[1] - 1][counter[0]].wall[2] = 1  # Mark the south wall of the cell above
+                except:
+                    pass
+            if (orientation == 180 and wallLeft()) or (orientation == 0 and wallRight()) or (wallFront() and orientation == 90)or (orientation==270 and wallBack()):
+                dist[counter[1]][counter[0]].wall[1] = 1
+                updatedist()
+                    # Mark the east wall of the current cell
+                try:
+                    dist[counter[1]][counter[0] + 1].wall[3] = 1  # Mark the west wall of the cell to the right
+                except:
+                    pass
+            if (orientation == 270 and wallLeft()) or (orientation == 90 and wallRight()) or (wallFront() and orientation == 180)or (orientation==0 and wallBack()):
+                dist[counter[1]][counter[0]].wall[2] = 1
+                    # Mark the south wall of the current cell
+                updatedist()
+                try:
+                    dist[counter[1] + 1][counter[0]].wall[0] = 1  # Mark the north wall of the cell below
+                except:
+                    pass
+                
+            if (orientation == 0 and wallLeft()) or (orientation == 180 and wallRight()) or (wallFront() and orientation == 270) or (orientation==90 and wallBack()):
+                dist[counter[1]][counter[0]].wall[3] = 1  # Mark the west wall of the current cell
+                updatedist()
+                try:
+                    dist[counter[1]][counter[0] - 1].wall[1] = 1  # Mark the east wall of the cell to the left
+                except:
+                    pass
             
-        if (orientation == 0 and wallLeft()) or (orientation == 180 and wallRight()) or (wallFront() and orientation == 270) or (orientation==90 and wallBack()):
-            dist[counter[1]][counter[0]].wall[3] = 1  # Mark the west wall of the current cell
-            updatedist()
-            try:
-                dist[counter[1]][counter[0] - 1].wall[1] = 1  # Mark the east wall of the cell to the left
-            except:
-                pass
-         
-        if not wallFront():
-            # log("-----------------------------------")
-            if orientation==0 and  dist[counter[1]-1][counter[0]].score<=cvalue: 
-                # log("11")
-                dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
-
-                counter[1]-=1
-                moveForward()
-                 
-                continue
-            elif orientation==90 and dist[counter[1]][counter[0]+1].score<=cvalue:
-                # log("22")
-                dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
-
-                counter[0]+=1
-                moveForward()
-                 
-                continue
-            elif orientation==180 and dist[counter[1]+1][counter[0]].score<=cvalue:
-                dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
-
-                counter[1]+=1
-                moveForward()
-                # log("33")
-                continue
-            elif orientation==270 and dist[counter[1]][counter[0]-1].score<=cvalue:
-                dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
-
-                counter[0]-=1
-                moveForward()                                                                                        
-                # log("44")
-                continue
-            
-        if not wallLeft():
-            if orientation==90: 
-                if dist[counter[1]-1][counter[0]].score<=cvalue:
+            if not wallFront():
+                # log("-----------------------------------")
+                if orientation==0 and  dist[counter[1]-1][counter[0]].score<=cvalue: 
+                    # log("11")
                     dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
 
                     counter[1]-=1
-                    turnLeft()
                     moveForward()
-                    turns+=1
-                    orientation-=90
-                     
+                    
                     continue
-            elif orientation==180:
-                if dist[counter[1]][counter[0]+1].score<=cvalue:
+                elif orientation==90 and dist[counter[1]][counter[0]+1].score<=cvalue:
+                    # log("22")
                     dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
 
                     counter[0]+=1
-                    turnLeft()
                     moveForward()
-                    turns+=1
-                    orientation-=90
-                     
+                    
                     continue
-            elif orientation==270:
-                if dist[counter[1]+1][counter[0]].score<=cvalue:
+                elif orientation==180 and dist[counter[1]+1][counter[0]].score<=cvalue:
                     dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
 
                     counter[1]+=1
-                    turnLeft()
                     moveForward()
-                    turns+=1
-                    orientation-=90
+                    # log("33")
                     continue
-            elif orientation==0:
-                if dist[counter[1]][counter[0]-1].score<=cvalue:
+                elif orientation==270 and dist[counter[1]][counter[0]-1].score<=cvalue:
                     dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
 
                     counter[0]-=1
-                    turnLeft()
-                    
-                    moveForward()
-                    turns+=1
-                    orientation-=90
+                    moveForward()                                                                                        
+                    # log("44")
                     continue
+                
+            if not wallLeft():
+                if orientation==90: 
+                    if dist[counter[1]-1][counter[0]].score<=cvalue:
+                        dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
+                        counter[1]-=1
+                        turnLeft()
+                        moveForward()
+                        turns+=1
+                        orientation-=90
+                        
+                        continue
+                elif orientation==180:
+                    if dist[counter[1]][counter[0]+1].score<=cvalue:
+                        dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+
+                        counter[0]+=1
+                        turnLeft()
+                        moveForward()
+                        turns+=1
+                        orientation-=90
+                        
+                        continue
+                elif orientation==270:
+                    if dist[counter[1]+1][counter[0]].score<=cvalue:
+                        dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+
+                        counter[1]+=1
+                        turnLeft()
+                        moveForward()
+                        turns+=1
+                        orientation-=90
+                        continue
+                elif orientation==0:
+                    if dist[counter[1]][counter[0]-1].score<=cvalue:
+                        dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
+                        counter[0]-=1
+                        turnLeft()
+                        
+                        moveForward()
+                        turns+=1
+                        orientation-=90
+                        continue
+                
+            if not wallRight():
+                
+                if orientation==270: 
+                    if dist[counter[1]-1][counter[0]].score<=cvalue:
+                        dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
+                        counter[1]-=1
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation+=90
+                        continue
+                elif orientation==0:
+
+                    if dist[counter[1]][counter[0]+1].score<=cvalue:
+
+                        dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+                        counter[0]+=1
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation+=90
+                        
+                        continue
+                elif orientation==90:
+                    if dist[counter[1]+1][counter[0]].score<=cvalue:
+                        dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+                        counter[1]+=1
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation+=90
+                        
+                        continue
+                elif orientation==180:
+                    if dist[counter[1]][counter[0]-1].score<=cvalue:
+                        dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
+                        counter[0]-=1
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation+=90
+                        
+                        continue
+            if not wallBack():
+                if orientation==270: 
+                    if dist[counter[1]][counter[0]+1].score<=cvalue:
+                        dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
+
+                        counter[0]+=1
+                        turnRight()
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation=90
+                        continue
+                elif orientation==0:
+
+                    if dist[counter[1]+1][counter[0]].score<=cvalue:
+                        dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
+
+                        counter[1]+=1
+                        turnRight()
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation=180
+                        continue
+                elif orientation==90:
+                    if dist[counter[1]][counter[0]-1].score<=cvalue:
+                        dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
+
+                        counter[0]-=1
+                        turnRight()
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation=270
+                        continue
+                elif orientation==180:
+                    if dist[counter[1]-1][counter[0]].score<=cvalue:
+                        dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
+
+                        counter[1]-=1
+                        turnRight()
+                        turnRight()
+                        moveForward()
+                        turns+=1
+                        orientation=0
+                        continue
             
-        if not wallRight():
-            
-            if orientation==270: 
-                if dist[counter[1]-1][counter[0]].score<=cvalue:
-                    dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
-
-                    counter[1]-=1
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation+=90
-                    continue
-            elif orientation==0:
-
-                if dist[counter[1]][counter[0]+1].score<=cvalue:
-
-                    dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
-                    counter[0]+=1
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation+=90
-                    
-                    continue
-            elif orientation==90:
-                if dist[counter[1]+1][counter[0]].score<=cvalue:
-                    dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
-                    counter[1]+=1
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation+=90
-                    
-                    continue
-            elif orientation==180:
-                if dist[counter[1]][counter[0]-1].score<=cvalue:
-                    dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
-
-                    counter[0]-=1
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation+=90
-                     
-                    continue
-        if not wallBack():
-            if orientation==270: 
-                if dist[counter[1]][counter[0]+1].score<=cvalue:
-                    dist[counter[1]][counter[0]+1].parent=dist[counter[1]][counter[0]]
-
-                    counter[0]+=1
-                    turnRight()
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation=90
-                    continue
-            elif orientation==0:
-
-                if dist[counter[1]+1][counter[0]].score<=cvalue:
-                    dist[counter[1]+1][counter[0]].parent=dist[counter[1]][counter[0]]
-
-                    counter[1]+=1
-                    turnRight()
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation=180
-                    continue
-            elif orientation==90:
-                if dist[counter[1]][counter[0]-1].score<=cvalue:
-                    dist[counter[1]][counter[0]-1].parent=dist[counter[1]][counter[0]]
-
-                    counter[0]-=1
-                    turnRight()
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation=270
-                    continue
-            elif orientation==180:
-                if dist[counter[1]-1][counter[0]].score<=cvalue:
-                    dist[counter[1]-1][counter[0]].parent=dist[counter[1]][counter[0]]
-
-                    counter[1]-=1
-                    turnRight()
-                    turnRight()
-                    moveForward()
-                    turns+=1
-                    orientation=0
-                    continue
-        
-        updatedist()
+            updatedist()
             
                 
         
