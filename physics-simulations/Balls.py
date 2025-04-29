@@ -6,7 +6,7 @@ from time  import time
 
 pg.init()
 
-dis=pg.display.set_mode((600,600))
+dis=pg.display.set_mode((600,800))
 
 clk=pg.time.Clock()
 
@@ -20,12 +20,10 @@ run=True
 
 class ball():
 
-	def __init__(self,x,y):		self.x=x
-
+	def __init__(self,x,y):		
+		self.x=x
 		self.y=y
-
 		self.sz=2
-
 		self.p=0
 
 		self.t=0
